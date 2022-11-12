@@ -9,43 +9,42 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Build
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Build project
-        run: npm run build
-
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-
-  deploy:
+  deploy-dev:
     name: Deploy
-    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
+    environment:
+      name: dev
+      url: 'https://br.pinterest.com'
+      needs: build
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
+    - name: Run a one-line script
+      run: echo Deploy dev
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+
+  deploy-hmg:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: hmg
+      url: 'https://br.pinterest.com'
+      needs: deploy-dev
+    steps:
+    - name: Run a one-line script
+      run: echo Deploy hmg
+
+
+  deploy-prd:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: prd
+      url: 'https://br.pinterest.com'
+      needs: deploy-hmg
+    steps:
+    - name: Run a one-line script
+      run: echo Deploy prd
