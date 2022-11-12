@@ -1,50 +1,28 @@
-name: Deploy
-
+name: Build and Deploy
 on:
   push:
     branches:
       - master
-
 jobs:
-  build:
-    name: Build
+  build-and-deploy:
     runs-on: ubuntu-latest
+    concurrency: ci-${{github.ref}}
     steps:
-    - name: Run a one-line script
-      run: echo Build
-
-
-  deploy-dev:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-      url: 'https://br.pinterest.com'
-      needs: build
-    steps:
-    - name: Run a one-line script
-      run: echo Deploy dev
-
-
-  deploy-hmg:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: hmg
-      url: 'https://br.pinterest.com'
-      needs: deploy-dev
-    steps:
-    - name: Run a one-line script
-      run: echo Deploy hmg
-
-
-  deploy-prd:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: prd
-      url: 'https://br.pinterest.com'
-      needs: deploy-hmg
-    steps:
-    - name: Run a one-line script
-      run: echo Deploy prd
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Configure Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.16.0'
+      
+      - name: Install
+        run: |
+          npm ci
+          npm run build
+          
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: public
+          branch: gh-pages
