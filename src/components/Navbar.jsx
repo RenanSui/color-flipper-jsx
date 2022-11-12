@@ -8,10 +8,10 @@ const Navbar = () => {
 
 			<ul>
 				<li>
-					<Link to='/'>Simple</Link>
+					<Link to='/color-flipper-jsx/'>Simple</Link>
 				</li>
 				<li>
-					<Link to='/hex'>Hex</Link>
+					<Link to='/color-flipper-jsx/hex'>Hex</Link>
 				</li>
 			</ul>
 		</NavbarContainer>

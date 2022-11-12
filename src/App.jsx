@@ -12,8 +12,8 @@ function App() {
 				<Navbar />
 				<>
 					<Routes>
-						<Route path='/' element={<Simple />} />
-						<Route path='/hex' element={<Hex />} />
+						<Route path='/color-flipper-jsx/' element={<Simple />} />
+						<Route path='/color-flipper-jsx/hex' element={<Hex />} />
 					</Routes>
 				</>
 			</>
